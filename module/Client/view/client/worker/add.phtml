@@ -1,0 +1,581 @@
+<?php $company = $this->getCompany();?>
+<div class="row">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#worker_details" data-toggle="tab"> <span class="visible-xs"><i class="fa-home"></i></span> <span class="hidden-xs">Worker Details</span>
+		</a></li>
+		<?php if ($form->get('user_id')->getValue()):?>
+		<li class="<?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>"><a href="#schedule" data-toggle="tab"> <span class="visible-xs"><i class="fa-user"></i></span> <span class="hidden-xs">Schedules</span>
+		</a></li>
+		<?php endif;?>
+	</ul>
+	<!-- Conversation -->
+	<div class="tab-content">
+		<div class="tab-pane active" id="worker_details">
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<?php $form->prepare();
+					if (!$form->get('worker_id')->getValue()):?>
+					<h3 class="panel-title">Add a Worker</h3>
+					<?php else :?>
+					<h3 class="panel-title">Edit a Worker</h3>
+					<?php endif;?>
+				</div>
+				<div class="panel-body">
+					<h4 class="wktitle">Profile information</h4>
+					<?php echo $this->form()->openTag($form);?>
+						<div class="row">
+							<div class="col-md-3"> 
+								<!-- User Info Sidebar -->
+								<div class="user-info-sidebar text-center auser">
+									<div class="profile-pic"> 
+										<div class="user-img crop crop-ie-100 crop-ie">
+											<img class="upload-image-user" src="<?php echo ($form->get('avatar')->getValue()) ? $form->get('avatar')->getValue() : "/images/user-2.png" ?>" />
+										</div>
+										<div class="edit"> <a href="javascript:void(0);"> <i class="fa fa-edit fa-lg" onclick="jQuery('#modal_croppic').modal('show', {backdrop: 'static'});"></i> </a> </div>
+										<!--crop user picture modal -->
+										<?php
+										echo $this->render ( 'partial/upload-avatar.phtml', array (
+											'urlAmazon' => ($form->get('avatar')->getValue()) ? $form->get('avatar')->getValue() : '' ,
+											'userId' => ($form->get('user_id')->getValue()) ? $form->get('user_id')->getValue() : '',
+											'step' => 2
+										) );
+										?>
+										<input type="hidden" id="file-amazon" name="file-amazon" value="<?php echo ($form->get('avatar')->getValue()) ? $form->get('avatar')->getValue() : '' ?>">
+										<!-- end crop user picture modal -->
+									</div>
+									<?php if ($form->get('worker_id')->getValue()): ?>
+										<?php echo $form->get('first_name')->getValue()?> <?php echo $form->get('last_name')->getValue()?>							
+									<?php //echo $this->partial('partial/rating.phtml', array('rating' => $rating->rating ,'class'=>'text-center user-star text-pink')); ?>
+									<div class="text-center"> <span><strong><?php //echo round($rating->rating) > 0 ? round($rating->rating) . '% Positive Rating' : 'No rating'; ?></strong></span> </div>
+									<?php if(!$this->isSocialOnlyNotRequest()):?>
+									<hr />
+										<div class="text-center"> <span><strong>Activity summary</strong></span> </div>
+									<ul class="list-unstyled user-friends-count">
+										<li class="text-center"><span><?php echo $this->getUser($form->get('user_id')->getValue())->getHoursWorkedOfUser()?></span> Hours</li>
+										<li class="text-center"><span><?php echo $this->getUser($form->get('user_id')->getValue())->getShiffWorkedOfUser()?></span> Shifts</li>
+									</ul>
+									<?php endif;?>
+									<?php endif;?>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<div class="form-group">
+									<label class="col-sm-4 col-md-3  control-label" for="field-8">Group</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('group_id'))?>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Email login</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('email'))?>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">First name</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('first_name'))?>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Last name</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('last_name'))?>
+									</div>
+								</div>
+								<!--<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label">Day of birth</label>
+									<div class="col-sm-7">
+										<div class="input-group">
+											<div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+											<?php echo $this->formElement($form->get('birthday'))?>
+										</div>
+									</div>
+								</div>-->
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label">Gender</label>
+									<div class="col-sm-4">
+										<?php echo $this->formElement($form->get('gender'))?> 
+									</div>
+								</div>
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Address</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('address'))?> 
+									</div>
+								</div>
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Telephone</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('phone1'))?> 
+									</div>
+								</div>
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Suburb/Post code</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('suburb'))?> 
+									</div>
+								</div>
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">State</label>
+									<div class="col-sm-4">
+										<?php echo $this->formElement($form->get('state'))?> 
+									</div>
+								</div>
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Primary Office</label>
+									<div class="col-sm-4">
+										<?php echo $this->formElement($form->get('primary_office'))?> 
+									</div>
+								</div>
+								
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<div class="row">
+										<div class="col-sm-4 col-md-3 hidden-xs">&nbsp;</div>
+										<div class="col-sm-8">
+											<div class="item-checkbox">
+												<label>
+												<?php echo $this->formCheckbox($form->get('is_police_check'));?> Police check	
+												</label>
+												<?php if(!empty($police_check)):?>
+													<a href="<?php echo $police_check?>"><i class="fa fa-save"></i></a>
+												<?php endif;?>
+											
+											</div>
+											<div class="item-checkbox">
+												<label>
+												<?php echo $this->formCheckbox($form->get('is_identity_check'));?> First Aid Check
+												</label>
+												<?php if(!empty($identity_check)):?>
+													<a href="<?php echo $identity_check?>"><i class="fa fa-save"></i></a>
+												<?php endif;?>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label">Police check date</label>
+									<div class="col-sm-7">
+										<div class="row">
+											<div class="col-xs-10">
+												<div class="input-group">
+													<div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+													<?php echo $this->formElement($form->get('police_check_date'))?>
+												</div>
+											</div>
+											
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group" style="<?php echo ($this->isSocialOnly()) ? 'display: none;' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label">First Aid check date</label>
+									<div class="col-sm-7">
+										<div class="row">
+											<div class="col-xs-10">
+												<div class="input-group">
+													<div class="input-group-addon"> <a href="#"><i class="linecons-calendar"></i></a> </div>
+													<?php echo $this->formElement($form->get('identity_check_date'))?> 
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Drivers License Number</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('driver_license_number'))?>
+									</div>
+								</div>
+
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Drivers License Expiry Date</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('driver_license_expire'))?>
+									</div>
+								</div>
+
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Car Registration</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('car_registration'))?>
+									</div>
+								</div>
+
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Insurance Number</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('insurance_number'))?>
+									</div>
+								</div>
+
+								<div class="form-group <?php echo (!$company->checkRequest()) ? 'hidden' : NULL?>">
+									<label class="col-sm-4 col-md-3 control-label" for="field-8">Insurance Expiry</label>
+									<div class="col-sm-7">
+										<?php echo $this->formElement($form->get('insurance_expiry'))?>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<?php if ($company->checkRequest()):?>
+						<h4 class="wktitle">Assign Service</h4>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-2 asign-skill">
+								<div class="row">
+									<div class="col-sm-4 col-md-3 col-xs-6">
+									<?php 
+									$this->FormMultiCheckbox()->setSeparator('</div><div class="col-sm-4 col-md-3 col-xs-6">');
+									echo $this->FormMultiCheckbox($form->get('skills'));
+									?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>
+						<div class="row btn-action">
+							<div class="col-sm-12 text-right">
+								<?php echo $this->formElement($form->get('save'))?> 
+								<?php echo $this->formElement($form->get('cancel'))?>
+								<?php echo $this->formElement($form->get('avatar'))?> 
+								<?php echo $this->formElement($form->get('company_worker_csrf'))?>
+								<?php echo $this->formElement($form->get('user_id'))?>
+								<?php echo $this->formElement($form->get('worker_id'))?>
+								<?php echo $this->formElement($form->get('task'))?>
+								<?php echo $this->formElement($form->get('latitude'))?>
+								<?php echo $this->formElement($form->get('longitude'))?>
+								<input type="hidden" name="file" />
+							</div>
+						</div>
+					<?php echo $this->form()->closeTag($form);?>
+				</div>
+			</div>
+		</div>
+		<div class="tab-pane" id="schedule">
+			<div class="panel panel-default">
+				<div class="panel-heading">Schedules</div>
+				<div class="panel-body">
+					<?php echo isset($schedule) ? $schedule : NULL?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script src="<?php echo $this->basePath(); ?>/js/google_api_places.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	
+	$("#address").on('focus', function () {
+		geolocate();
+	});
+	$("#group_id").selectBoxIt().on('open', function(){
+	});
+	$("#gender").selectBoxIt().on('open', function(){
+	});
+	$.validator.setDefaults({ ignore: ":hidden:not(select)" });
+	var validator = $("form#company-worker-form").validate({
+		rules: {
+			group_id : {
+				required : true,
+			},
+			email : {
+				required : true,
+				email : true
+			},
+			contact_email : {
+				required : true,
+				email : true
+			},
+			first_name: {
+				required: true,
+				maxlength: 255
+			},
+			last_name: {
+				required: true,
+				maxlength: 255
+			},
+			<?php if (!$this->isSocialOnly()):?>
+			birthday: {
+				required: true,
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			gender: {
+				required: true,
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			address: {
+				required: true,
+				maxlength: 255
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			phone1 : {
+				required: true,
+				maxlength: 15,
+				digits: true
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			postcode_suggest : {
+				required: true,
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			state : {
+				required: true,
+			}
+			<?php endif;?>
+		},
+		messages: {
+			group_id: {
+				required : '<?php echo sprintf(E000001,'Group')?>',
+			},
+			email : {
+				required : '<?php echo sprintf(E000001,'E-mail')?>',
+				email : '<?php echo sprintf(E000005)?>'
+			},
+			contact_email : {
+				required : '<?php echo sprintf(E000001,'Email contact')?>',
+				email : '<?php echo sprintf(E000005)?>'
+			},
+			
+			first_name :{
+				required : '<?php echo sprintf(E000001,'First Name')?>',
+				maxlength : '<?php echo sprintf(E000002,'First Name',255)?>',
+			},
+			last_name : {
+				required : '<?php echo sprintf(E000001,'Last name')?>',
+				maxlength : '<?php echo sprintf(E000002,'Last name',255)?>',
+			},
+			<?php if (!$this->isSocialOnly()):?>
+			birthday : {
+				required : '<?php echo sprintf(E000001,'Date of birth')?>',
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			gender : {
+				required : '<?php echo sprintf(E000001,'Gender')?>',
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			address :{
+				required : '<?php echo sprintf(E000001,'Address')?>',
+				maxlength : '<?php echo sprintf(E000002,'Address',255)?>',
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			phone1 :{
+				required : '<?php echo sprintf(E000001,'Phone')?>',
+				maxlength : '<?php echo sprintf(E000002,'Phone',15)?>',
+				digits : '<?php echo sprintf(E000006,'Phone')?>',
+			},
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			state :{
+				required : '<?php echo sprintf(E000001,'State')?>',
+			},
+			<?php endif;?>
+		},
+		errorElement: 'span',
+		errorClass: 'validate-has-error',
+		errorPlacement: function(error, element) {
+			if(element.attr('name') == 'birthday') {
+				error.appendTo("#birth-day" );
+			} else {
+				error.appendTo( element.parent("div"));
+			}
+		},
+		invalidHandler: function(event, validator) {
+			<?php if (!$this->isSocialOnlyNotRequest() ):?>
+			var skills = $('input[name^=skills]:checked');
+			if(!skills.length){
+				if( ! $('input[name^=skills]').parents('div.col-sm-10 span#skill-error').length)
+					$('div.asign-skill').append('<span id="skill-error" class="validate-has-error">Skill is required.</span>');
+			}else{
+				$('div.asign-skill').find('span#skill-error').remove();
+			}
+			<?php endif;?>
+		},
+		submitHandler: function(form) {
+			var task = $(form).find('input[name=task]').val();
+			if (task == 'cancel'){
+				return form.submit();
+			}
+			<?php if ($company->checkRequest()):?>
+			var validator = this,flag = null;
+			var skills = $('input[name^=skills]:checked');
+			if(!skills.length){
+				$('div.asign-skill').append('<span id="skill-error" class="validate-has-error">Skill is required.</span>');
+				return ;
+			}
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			if($('input[name^=is_police_check]').is(':checked')){
+				if(!$('#police_check_date').val()){
+					validator.showErrors({
+						police_check_date: "<?php echo sprintf(E000001,'Police check date')?>"
+					});
+					flag = true;
+				}
+			}
+			<?php endif;?>
+			<?php if (!$this->isSocialOnly()):?>
+			if($('input[name^=is_identity_check]').is(':checked')){
+				if(!$('#identity_check_date').val()){
+					validator.showErrors({
+						identity_check_date: "<?php echo sprintf(E000001,'Identity Check Date')?>"
+					});
+					flag = true;
+				}
+			}
+			<?php endif;?>
+			//validate Drivers License Number
+			<?php if($company->checkRequest()):?>
+			if(!$('#driver_license_number').val() && $('#driver_license_expire').val()){
+				validator.showErrors({
+					driver_license_number: "<?php echo sprintf(E000001,'Drivers License Number')?>"
+				});
+				flag = true;
+			}
+			<?php endif;?>
+			//validate card Drivers License Expiry Date
+			<?php if($company->checkRequest()):?>
+			if($('#driver_license_number').val() && !$('#driver_license_expire').val()){
+				validator.showErrors({
+					driver_license_expire: "<?php echo sprintf(E000001,'Drivers License Expiry Date')?>"
+				});
+				flag = true;
+			}
+			<?php endif;?>
+			//validate Car Registration
+			<?php if($company->checkRequest()):?>
+			if(!$('#car_registration').val() && ($('#insurance_number').val() || $('#insurance_expiry').val() ) ){
+				validator.showErrors({
+					car_registration: "<?php echo sprintf(E000001,'Car Registration')?>"
+				});
+				flag = true;
+			}
+			<?php endif;?>
+			//validate Insurance Number
+			<?php if($company->checkRequest()):?>
+			if(!$('#insurance_number').val() &&  $('#insurance_expiry').val() ){
+				validator.showErrors({
+					insurance_number: "<?php echo sprintf(E000001,'Insurance Number')?>"
+				});
+				flag = true;
+			}
+			<?php endif;?>
+			//validate Insurance Expiry
+			<?php if($company->checkRequest()):?>
+			if(!$('#insurance_expiry').val() && $('#insurance_number').val() ){
+				validator.showErrors({
+					insurance_expiry: "<?php echo sprintf(E000001,'Insurance Expiry')?>"
+				});
+				flag = true;
+			}
+			<?php endif;?>
+			if(flag){
+				return false;
+			}
+			
+			var email = $(form).find('input[name=email]').val();
+			var user_id = $(form).find('input[name=user_id]').val();
+			$.ajax({
+				method: "POST",
+				url: "<?php 
+						echo $this->url(
+							"company-worker", 
+							array(
+								'action' => 'ajaxCheckEmail'
+							)
+					);?>",
+				data: { 
+					email: email,
+					user_id: user_id,
+					
+					
+				}
+			}).done(function( result ) {
+				if(result.flag == 0){
+					$(form).find("[type='submit']").prop('disabled',true);
+					form.submit();
+				}else{
+					$(form).find("[type='submit']").prop('disabled',false);
+					validator.showErrors({
+						"email": "<?php echo sprintf(E000013)?>"
+					});
+					return false;
+				}
+				$(form).find("[type='submit']").prop('disabled',true);
+				return false;
+			});
+			$(form).find("[type='submit']").prop('disabled',true);
+			return false;
+		}
+	});
+	
+	<?php if (!$this->isSocialOnlyNotRequest() ):?>
+	$('input[name^=skills]').click(function(){
+		var skills = $('input[name^=skills]:checked');
+		if(!skills.length){
+			if( ! $('div.asign-skill span#skill-error').length)
+				$('div.asign-skill').append('<span id="skill-error" class="validate-has-error">Skill is required.</span>');
+		}else{
+			$('div.asign-skill').find('span#skill-error').remove();
+		}
+	});
+	<?php endif;?>
+	$("#save").click(function() {
+		$('#task').val('save');
+	});
+	$("#cancel").click(function() {
+		$('#task').val('cancel');
+		$("form#company-worker-form").validate().cancelSubmit = true;
+	});
+	
+	$('#birthday,#police_check_date,#identity_check_date').datepicker({
+		format : 'D, dd MM yyyy',
+		endDate : '<?php echo date('D, d M yyyy')?>',
+	}).on('changeDate', function(ev){
+		$('#birthday').next().remove();
+	});
+	<?php if (!$form->get('is_police_check')->getValue()):?>
+		$('#police_check_date').parents('div.form-group').css({'display':'none'});
+	<?php endif;?>
+	<?php if (!$form->get('identity_check_date')->getValue()):?>
+	$('#identity_check_date').parents('div.form-group').css({'display':'none'});
+	<?php endif;?>
+	
+	$('input[name^=is_police_check]').change(function(){
+		if($(this).is(':checked')){
+			$('#police_check_date').parents('div.form-group').css({'display':'block'});
+		}else{
+			$('#police_check_date').val('').parents('div.form-group').css({'display':'none'});
+		}
+	});
+
+	$('input[name^=is_identity_check]').change(function(){
+		if($(this).is(':checked')){
+			$('#identity_check_date').parents('div.form-group').css({'display':'block'});
+		}else{
+			$('#identity_check_date').val('').parents('div.form-group').css({'display':'none'});
+		}
+	});
+	$('#driver_license_expire').datepicker({
+		format : 'mm/yyyy',
+		startView: "year",
+		minViewMode: "months"
+	});
+	$('#insurance_expiry').datepicker({
+		format : 'dd/mm/yyyy',
+	})
+});
+</script>

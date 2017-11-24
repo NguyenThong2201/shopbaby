@@ -1,0 +1,356 @@
+<!--banner-bottom-->
+<div class="ban-bottom-w3l">
+	<div class="container">
+		<div class="col-md-6 ban-bottom">
+			<div class="ban-top">
+				<img src="<?php echo $this->basePath('/img/p1.jpg')?>"
+					class="img-responsive" alt="" />
+				<div class="ban-text">
+					<h4>Men’s Clothing</h4>
+				</div>
+				<div class="ban-text2 hvr-sweep-to-top">
+					<h4>
+						50% <span>Off/-</span>
+					</h4>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 ban-bottom3">
+			<div class="ban-top">
+				<img src="<?php echo $this->basePath('/img/p2.jpg')?>"
+					class="img-responsive" alt="" />
+				<div class="ban-text1">
+					<h4>Women's Clothing</h4>
+				</div>
+			</div>
+			<div class="ban-img">
+				<div class=" ban-bottom1">
+					<div class="ban-top">
+						<img src="<?php echo $this->basePath('/img/p3.jpg')?>"
+							class="img-responsive" alt="" />
+						<div class="ban-text1">
+							<h4>T - Shirt</h4>
+						</div>
+					</div>
+				</div>
+				<div class="ban-bottom2">
+					<div class="ban-top">
+						<img src="<?php echo $this->basePath('/img/p4.jpg')?>"
+							class="img-responsive" alt="" />
+						<div class="ban-text1">
+							<h4>Hand Bag</h4>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<!--banner-bottom-->
+<!--new-arrivals-->
+<div class="product-agile">
+	<div class="container">
+		<h3 class="tittle1">Sale Products</h3>
+		<div class="slider">
+			<div class="callbacks_container">
+				<ul class="rslides" id="slider">
+					<li>
+						<div class="caption">
+							<?php foreach ($productsSale as $prs):?>
+							<div class="col-md-3 cap-left simpleCart_shelfItem">
+								<div class="grid-arr">
+									<div class="grid-arrival">
+										<figure>
+											<a href="single.html">
+												<div class="grid-img">
+													<img src="img/<?php echo $prs->img_name;?>"
+														class="img-responsive" alt="">
+												</div>
+											</a>
+										</figure>
+									</div>
+									<?php $sale = $prs->unit_price - $prs->promotion_price;?>
+									<div class="ribben">
+										<p>-<?php echo number_format($sale);?>$</p>
+									</div>
+									<div class="block">
+										<div class="starbox small ghosting"></div>
+									</div>
+									<div class="women">
+										<h6>
+											<a href="single.html"><?php echo $prs->name;?></a>
+										</h6>
+										<span class="size">XL / XXL 148/ S </span>
+										<p>
+											<del><?php echo number_format($prs->promotion_price);?></del>
+											<em class="item_price"><?php echo number_format($prs->unit_price);?></em>
+										</p>
+										<a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add
+											To Cart</a>
+									</div>
+								</div>
+							</div>
+							<?php endforeach;?>
+							<div class="clearfix"></div>
+						</div>
+					</li>
+					<li>
+						<div class="caption">
+							<div class="col-md-3 cap-left simpleCart_shelfItem">
+								<div class="grid-arr">
+									<div class="grid-arrival">
+										<figure>
+											<a href="single.html">
+												<div class="grid-img">
+													<img src="img/p10.jpg" class="img-responsive" alt="">
+												</div>
+												<div class="grid-img">
+													<img src="img/p9.jpg" class="img-responsive" alt="">
+												</div>
+											</a>
+										</figure>
+									</div>
+									<div class="ribben">
+										<p>NEW</p>
+									</div>
+									<div class="block">
+										<div class="starbox small ghosting"></div>
+									</div>
+									<div class="women">
+										<h6>
+											<a href="single.html">Sed ut perspiciatis unde</a>
+										</h6>
+										<span class="size">XL / XXL / S </span>
+										<p>
+											<del>$100.00</del>
+											<em class="item_price">$70.00</em>
+										</p>
+										<a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add
+											To Cart</a>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--new-arrivals-->
+<!--accessories-->
+<div class="accessories-w3l">
+	<div class="container">
+		<h3 class="tittle">20% Discount on</h3>
+		<span>TRENDING DESIGNS</span>
+		<div class="button">
+			<a href="#" class="button1"> Shop Now</a> <a href="#" class="button1">
+				Quick View</a>
+		</div>
+	</div>
+</div>
+<!--accessories-->
+<div class="new-arrivals-w3agile">
+	<div class="container">
+		<h2 class="tittle">New Product</h2>
+		<div class="arrivals-grids">
+			<?php foreach ($productsNew as $prn):?>
+			<div class="col-md-3 arrival-grid simpleCart_shelfItem bt-product">
+				<div class="grid-arr">
+					<div class="grid-arrival">
+						<figure>
+							<a href="#" class="new-gri" data-toggle="modal"
+								data-target="#myModal1">
+								<div class="grid-img">
+									<img src="img/<?php echo $prn->img_name;?>"
+										class="img-responsive" alt="">
+								</div>
+									
+							</a>
+						</figure>
+					</div>
+					<?php if ($prn->new == 0):?>
+					<div class="ribben">
+						<p>NEW</p>
+					</div>
+					<?php endif;?>
+					<?php if ($prn->unit_price > $prn->promotion_price):?>
+					<div class="ribben1">
+						<p>SALE</p>
+					</div>
+					<?php endif;?>
+					<div class="block">
+						<div class="starbox small ghosting"></div>
+					</div>
+					<div class="women">
+						<h6>
+							<a href="single.html"><?php echo $prn->name?></a>
+						</h6>
+						<span class="size">XL / XXL / S </span>
+						<p>
+							<?php if ($prn->unit_price > $prn->promotion_price):?>
+							<del><?php echo number_format($prn->unit_price);?></del>
+							<?php endif;?>
+							<em class="item_price"><?php echo number_format($prn->promotion_price);?></em>
+							
+						</p>
+						<a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add
+							To Cart</a>
+					</div>
+				</div>
+			</div>
+			<?php endforeach;?>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<!--- best seller--->
+<div class="latest-w3">
+	<div class="container">
+		<h3 class="tittle1">Latest Fashion Trends</h3>
+		<div class="latest-grids">
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l1.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Men</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-50%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l2.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Shoes</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-20%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l3.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Women</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-50%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="latest-grids">
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l4.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Watch</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-45%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l5.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Bag</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-10%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 latest-grid">
+				<div class="latest-top">
+					<img src="img/l6.jpg" class="img-responsive" alt="">
+					<div class="latest-text">
+						<h4>Cameras</h4>
+					</div>
+					<div class="latest-text2 hvr-sweep-to-top">
+						<h4>-30%</h4>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<!--- best seller--->
+<div class="new-arrivals-w3agile">
+	<div class="container">
+		<h3 class="tittle1">All Products</h3>
+		<div class="arrivals-grids">
+			<?php foreach ($products as $pr):?>
+			<div class="col-md-3 arrival-grid simpleCart_shelfItem bt-product">
+				<div class="grid-arr">
+					<div class="grid-arrival">
+						<figure>
+							<a href="single.html">
+								<div class ="grid-img">
+									<img src="img/<?php echo $pr->img_name;?>" class="img-responsive" alt="">
+								</div>
+							</a>
+						</figure>
+					</div>
+					<?php if ($pr->new == 0):?>
+					<div class="ribben">
+						<p>NEW</p>
+					</div>
+					<?php endif;?>
+					<?php if ($pr->unit_price > $pr->promotion_price):?>
+					<div class="ribben1">
+						<p>SALE</p>
+					</div>
+					<?php endif;?>
+					<div class="block">
+						<div class="starbox small ghosting"></div>
+					</div>
+					<div class="women">
+						<h6>
+							<a href="single.html"><?php echo $pr->name;?></a>
+						</h6>
+						<span class="size">XL / XXL / S </span>
+						
+						<p>
+							<?php if ($pr->unit_price > $pr->promotion_price):?>
+							<del><?php echo number_format($pr->unit_price);?></del>
+							<?php endif;?>
+							<em class="item_price"><?php echo number_format($pr->promotion_price);?></em>
+							
+						</p>
+						
+						<a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add
+							To Cart</a>
+					</div>
+				</div>
+			</div>
+			<?php endforeach;?>
+			<div class="clearfix"></div>
+		</div>
+		<ul class="pagination modal-3">
+            <?php
+                for ($i = 0; $i < 10 ; $i++){
+
+                }
+            ?>
+			<li><a href="#" class="prev">&laquo</a></li>
+			<li><a href="#" class="active">1</a></li>
+			<li> <a href="#">2</a></li>
+			<li> <a href="#">3</a></li>
+			<li> <a href="#">4</a></li>
+			<li><a href="#" class="next">&raquo;</a></li>
+			</ul>
+	</div>
+</div>
+<!--- end best seller--->

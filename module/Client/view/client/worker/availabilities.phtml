@@ -1,0 +1,316 @@
+<div class="row"> 
+	<!-- Conversation -->
+	<div class="col-sm-12 view-list-tbl">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Check Availabilities</h3>
+			</div>
+			<div class="panel-body"> 
+				<script type="text/javascript">
+					jQuery(document).ready(function($){
+						var dataSet = <?php echo $workers?>;
+						$("#place-manager").dataTable({
+							aLengthMenu: [
+								[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
+							],
+							"dom": 'rt<"bottom"ip><"clear">',						
+							"bLengthChange": false,
+							"bFilter": false,
+							data: dataSet,
+							"columns": [
+								{ "data": "no","width": "10%" },
+								{ "data": "display_name","width": "35%" },
+								{ "data": "phone","width": "30%" },
+								{ "data": "gender","width": "15%" },
+							],
+							"language": {
+								"emptyTable": "No worker available!"
+							},
+						});
+					});
+			</script>
+				<?php 
+			$form->prepare();
+			echo $this->form()->openTag($form);
+			?>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="col-sm-3 control-label" for="field-8">Address:</label>
+							<div class="col-sm-7 address1"> <?php echo $this->formElement($form->get('address')->setAttributes(array( 'class' =>'form-control'))); ?> </div>
+							<?php echo $this->formElement($form->get('client_id'))?> <?php echo $this->formElement($form->get('place_id'))?> <?php echo $this->formElement($form->get('state'))?> <?php echo $this->formElement($form->get('latitude'))?> <?php echo $this->formElement($form->get('longitude'))?> <?php echo $this->formElement($form->get('suburb'))?> <?php echo $this->formElement($form->get('postcode'))?> </div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="col-sm-3 control-label" for="field-8">Skills:</label>
+							<div class="col-sm-7">
+								<div class="input-group W100p"> 
+									<script type="text/javascript">
+											jQuery(document).ready(function($){
+												$("#skill").select2({
+													placeholder: 'Enter skill name',
+													allowClear: true,
+													width: '100%'
+												}).on('select2-open', function(){
+													// Adding Custom Scrollbar
+													$(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+												}).on("change", function (e) { 
+													if($(this).val()){
+														$(this).next().remove();
+													} 
+												}).on("click", function () { 
+													
+													if(!$(this).val()){
+														$(this).parents('.skill').append('<span class="validate-has-error" id="skill-error">Skills is required.</span>');
+													}
+												});
+												
+											});
+										</script> 
+									<?php echo $this->formElement($form->get('skills')); ?> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row btn-action">
+					<div class="col-sm-12 text-right"> <?php echo $this->formElement($form->get('submit'))?> </div>
+				</div>
+				<div class="table-responsive">
+					<table id="place-manager" class="table table-striped table-bordered tbl-com-work-view" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>Full Name</th>
+								<th >Phone</th>
+								<th>Gender</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="row btn-action">
+					<div class="col-sm-12 text-right"> <?php echo $this->formElement($form->get('invite'))?> <?php echo $this->formElement($form->get('worker_csrf'))?> </div>
+				</div>
+				<?php echo $this->form()->closeTag($form);?> </div>
+		</div>
+	</div>
+</div>
+<link rel="stylesheet" href="<?php echo $this->basePath(); ?>/js/select2/select2.css">
+<link rel="stylesheet" href="<?php echo $this->basePath(); ?>/js/select2/select2-bootstrap.css">
+<link rel="stylesheet" href="<?php echo $this->basePath(); ?>/js/multiselect/css/multi-select.css">
+<script src="<?php echo $this->basePath(); ?>/js/select2/select2.min.js?t=now()"></script> 
+<script src="<?php echo $this->basePath(); ?>/js/multiselect/js/jquery.multi-select.js?t=now()"></script> 
+<script src="<?php echo $this->basePath(); ?>/js/autocomplete/jquery.auto-complete.js"></script>
+<link rel="stylesheet" href="<?php echo $this->basePath(); ?>/js/autocomplete/jquery.auto-complete.css">
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script> 
+<script src="<?php echo $this->basePath(); ?>/js/google_api_places.js?t=now()"></script> 
+<script type="text/javascript">
+$( document ).ready(function() {
+	$("#repeat").selectBoxIt().on('open', function(){
+	});
+	<?php if(isset($isAddress) && $isAddress == true) : ?>
+	//		$("#client_place").hide();
+	//		$("#client_address").show();
+		$("#client_place_name").hide();
+		$("#address").show();
+	<?php endif;?>
+	jQuery.validator.addMethod("request_type", function(value, element) {
+		var request_type =  ($('input[name=request_type]:checked', '#availabilities-form').val());
+		if(request_type == 2) {
+			if(value == '') {
+				return false;
+			}
+		} 
+		return true;
+	}, "Please specify the correct domain for your documents");
+	
+	jQuery.validator.addMethod("weekly_validate", function(value, element) {
+		var repeat_type = $('#repeat').val();
+		if(repeat_type == 2) {
+			var day_text = [];
+			$("input[name='weekly_day[]']").each(function() {
+			    var value = $(this).val();
+			    if (value) {
+			    	day_text.push(value);
+			    }
+			});
+			if (day_text.length === 0) {
+			   return false;
+			}
+		} 
+		return true;
+	}, "Please specify the correct domain for your documents");
+	
+	$.validator.setDefaults({ ignore: ":hidden:not(select)" }) 
+	//setTimeout(function(){ $(".fade-in-effect").addClass('on'); }, 1);
+	$("form#availabilities-form").validate({
+		rules: {
+			address : {
+				required: true,
+				//check_valid_address:true
+			},
+			client_place_name : {
+				required: true,
+			},
+			from_date : {
+				required: true,
+				date: true
+			},
+			"skills[]" : {
+				required: true,
+			},
+			repeat_type : {
+				request_type: true,
+				weekly_validate: true
+			}
+		},
+		messages: {
+			address: {
+				required: '<?php echo sprintf(E000001,'Address')?>',
+			},
+			client_place_name: {
+				required: '<?php echo sprintf(E000001,'Client Or Place')?>'
+			},
+			from_date: {
+				required: '<?php echo sprintf(E000001,'Date/Time')?>',
+				date: '<?php echo sprintf(E000007, 'Date/Time') ?>'
+			},
+			"skills[]": {
+				required: '<?php echo sprintf(E000001,'Skills')?>'
+			},
+			repeat_type: {
+				request_type: '<?php echo sprintf(E000001,'Interval')?>',
+				weekly_validate: '<?php echo sprintf(E000001,'Days')?>'
+			}
+		},
+		errorElement: 'span',
+		errorClass: 'validate-has-error',
+		errorPlacement: function(error, element) {
+			if(element.attr('name') == 'address' || element.attr('name') == 'client_place_name' ){
+				error.appendTo( element.parents("div.address1"));
+			} else {
+				error.appendTo( element.parent("div"));
+			}
+		},
+		success: function (label, element) {
+			if(label.attr('id') == 'address-error') {
+				$(".address1").removeClass( "validate-has-error" ).addClass( "valid" );
+			}
+		}
+	});
+	changeType();
+});
+$(function() {
+	$(".address").on('focus', function () {
+		$(function() {
+			$('.address').autocomplete({
+				serviceUrl: '<?php echo $this->basePath();?>/request/searchClientPlace',
+				type: 'post',
+				paramName : 'key',
+				autoSelectFirst: true,
+				onSearchComplete: function (query, suggestions) {
+					if(suggestions.length == 0) 
+					{
+						$("#client_id").val('');
+						$("#place_id").val('');
+						$("#administrative_area_level_1").val('');
+						$("#longitude").val('');
+						$("#latitude").val('');
+						$("#locality").val('');
+						$("#postal_code").val('');
+					}
+				},
+				onSelect: function (suggestion) {
+// 					if(suggestion.data == 'enter_address') {
+// 						$("#client_place").hide();
+// 						$("#client_address").show();
+// 						$("#address").val('');
+// 						$("#client_id").val('');
+// 						$("#place_id").val('');
+// 						$("#client_place_name").val('');
+//  					} else {
+						$("#client_id").val(suggestion.client_id);
+						$("#place_id").val(suggestion.place_id);
+						$("#administrative_area_level_1").val(suggestion.state);
+						$("#longitude").val(suggestion.longitude);
+						$("#latitude").val(suggestion.latitude);
+						$("#locality").val(suggestion.suburb);
+						$("#postal_code").val(suggestion.postcode);
+						$("#address").val('');
+// 					}
+				}
+			});
+		  });
+	});
+	$("#submit").click(function() {
+		$('#task').val('submit');
+	});
+	$("#invite").click(function() {
+		$('#task').val('invite');
+	});
+// 	$('a#close_address').click(function(){
+// 		$("#client_place").show();
+// 		$("#client_address").hide();
+// 		$("#address").val('');
+// 		$("#client_place_name").val('');
+// 		$("#client_id").val('');
+// 		$("#place_id").val('');
+// 	});
+
+	//option choose :'address' or 'client or place'
+	$('.option-address-choose').on('click', function() {
+		var optionText = $(this).find('span.option-address-text').text();
+		var optionVal = $(this).find('span.option-address-value').text();
+		$('#ipt-option-address').val(optionVal);
+		$('#span-option-address').text(optionText);
+		if(optionVal == 'client_or_place') {
+			$("#client_place_name").show();
+			$("#address").hide();
+			$("#address").val('');
+			$("#client_place_name").val('');
+			$("#client_id").val('');
+			$("#place_id").val('');
+		}else if (optionVal == 'address') {
+			$("#client_place_name").hide();
+			$("#address").show();
+			$("#address").val('');
+			$("#client_id").val('');
+			$("#place_id").val('');
+		}
+	});
+});
+$("input[name='request_type']").change(function(){
+	changeType();
+});
+$("#repeat").change(function(){
+	changeRepeat();
+});
+function changeType() {
+	var request_type = ($('input[name=request_type]:checked', '#availabilities-form').val());
+	if(request_type == 1) {
+		$("#once-off-date").show();
+		$("#ongoing").hide();
+		$("#weekly").hide();
+	} else {
+		$("#once-off-date").hide();
+		$("#ongoing").show();
+		changeRepeat();
+	} 
+}
+function changeRepeat() {
+	var repeat = $('#repeat :selected').val();
+	if(repeat == 2) {
+		$("#once-off-date").hide();
+		$("#weekly").show();
+	}  else if (repeat == 1){
+		$("#once-off-date").show();
+		$("#weekly").hide();
+	} else {
+		$("#once-off-date").hide();
+		$("#weekly").hide();
+	}
+}
+</script>
