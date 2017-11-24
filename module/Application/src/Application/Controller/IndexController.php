@@ -9,6 +9,7 @@
  */
 namespace Application\Controller;
 
+use Application\Model\SlideTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Model\ProductsTable;
@@ -28,7 +29,7 @@ class IndexController extends AbstractActionController {
 		$productsSale = $productTable->getListProductSale();
 		$this->layout('layout/main-layout');
 		$view->setTemplate('application/index/index.phtml');
-		return [ 
+		return [
 				'products' => $products,
 				'productsNew' => $productsNew,
 				'productsSale' => $productsSale,
