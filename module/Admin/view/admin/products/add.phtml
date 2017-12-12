@@ -45,7 +45,7 @@
 							</div>
 							<div class="form-group">
 								<label>Image Products</label>
-								<?php echo $this->formElement($form->get('image[]'))?>
+								<?php echo $this->formElement($form->get('image'))?>
 							</div>
 							<div class="form-group">
 								<label></label>
@@ -233,5 +233,60 @@
         $("#imgInp").change(function () {
             readURL(this);
         });
+        $.validator().setDefault({ ignore: ":hidden:not(select)"  });
+        var validator = $("form#products").validate({
+            rules:{
+                name:{
+                    required: true,
+                    maxlength: 100,
+                }
+            },
+            messages: {
+                company_name: {
+                    required: 'Products name no req',
+                    maxlength: 'Products name maxlength',
+                },
+            },
+            errorElement: 'span',
+            errorClass: 'validate-has-error',
+            errorPlacement: function(error, element) {
+                error.appendTo( element.parent("div"));
+            },
+            submitHandler: function(form) {
+                var id = $(form).find('input[name=id]').val();
+                var name = $(form).find('input[name=name]').val();
+                var validator = this;
+                alert('ok');
+                $.ajax({
+                    method: "POST",
+                    url: "<?php
+                        echo $this->url(
+                                "admin-products",
+                            array(
+                                'action' => 'ajaxCheckNameProducts'
+                            )
+                        );?>",
+                    data: {
+                        id: id,
+                        name: name,
+                    }
+                }).done(function( result ) {
+                    if(result.flag == 0){
+                        $(form).find("[type='submit']").prop('disabled',true);
+                        form.submit();
+                    }else{
+                        $(form).find("[type='submit']").prop('disabled',false);
+                        validator.showErrors({
+                            "name": "Tên sản phẩm đã tồn tại"
+                        });
+                        return false;
+                    }
+                    $(form).find("[type='submit']").prop('disabled',true);
+                    return false;
+                });
+                $(form).find("[type='submit']").prop('disabled',true);
+                return false;
+            }
+        })
     });
 </script>

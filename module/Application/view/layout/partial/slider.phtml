@@ -1,9 +1,21 @@
+
+<?php $slide = $this->getSlide(); ?>
 <div class="banner-w3">
 	<div class="demo-1">
 		<div id="example1" class="core-slider core-slider__carousel example_1">
 			<div class="core-slider_viewport">
 				<div class="core-slider_list">
-					<?php $this->SlideHelper?>
+                    <div class="core-slider_item">
+                        <img src="img/b1.jpg" class="img-responsive" alt="">
+                    </div>
+					<?php
+//                        foreach ($slide as $item){
+//                            echo "  <div class=\"core-slider_item\">
+//                                        <img src=\"images\" class=\"img-responsive\" alt=\"\">
+//                                    </div>";
+//                        }
+
+                    ?>
 				</div>
 			</div>
 			<div class="core-slider_nav">
@@ -13,14 +25,12 @@
 			<div class="core-slider_control-nav"></div>
 		</div>
 	</div>
-
 	<script>
-			$('#example1').coreSlider({
-			  pauseOnHover: false,
-			  interval: 3000,
-			  controlNavEnabled: true
-			});
-
-			</script>
+        $('#example1').coreSlider({
+          pauseOnHover: false,
+          interval: 3000,
+          controlNavEnabled: true
+        });
+    </script>
 
 </div>

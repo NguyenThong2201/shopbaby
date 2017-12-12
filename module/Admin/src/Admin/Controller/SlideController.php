@@ -67,6 +67,18 @@ class SlideController extends AbstractActionController
         ));
     }
 
+    public function deleteAction(){
+        $slideTable = new SlideTable($this->getAdapter());
+        $request = $this->getRequest();
+        if ($request->isPost()){
+            $data = $request->getPost();
+            if (!empty($data['idpro'])){
+                $slideTable->delete(array('id'=>$data['idpro']));
+            }
+        }
+        $this->redirect()->toRoute("admin-slide");
+    }
+
     private function getAdapter()
     {
         return $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');

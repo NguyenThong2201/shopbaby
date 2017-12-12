@@ -24,7 +24,7 @@ class ProductsForm extends Form{
 				'name' => 'name',
 				'type' => 'text',
 				'attributes' => array(
-						'id' => 'id',
+						'id' => 'name',
 						'class' => 'form-control',
 				)
 		));
@@ -33,7 +33,7 @@ class ProductsForm extends Form{
 				'type' => 'text',
 				
 				'attributes' => array(
-						'id' => 'id',
+						'id' => 'unit_price',
 						'placeholder' => '2.500.000',
 						'class' => 'form-control',
 				)
@@ -42,7 +42,7 @@ class ProductsForm extends Form{
 				'name' => 'promotion_price',
 				'type' => 'text',
 				'attributes' => array(
-						'id' => 'id',
+						'id' => 'promotion_price',
 						'placeholder' => '2.000.000',
 						'class' => 'form-control',
 				)
@@ -51,13 +51,13 @@ class ProductsForm extends Form{
 				'name' => 'description',
 				'type' => 'textarea',
 				'attributes' => array(
-						'id' => 'id',
+						'id' => 'description',
 						'placeholder' => 'Bán chứ không cho ...',
 						'class' => 'form-control',
 				)
 		));
 		$this->add(array(
-				'name' => 'image[]',
+				'name' => 'image',
 				'type' => 'file',
 				
 				'attributes' => array(

@@ -38,7 +38,7 @@ class Module {
 		return array(
 				'factories' => array(
 						'test_helper' => function($sm) {
-						$slidehelper = new View\Helper\SlideHelper;
+						$slidehelper = new View\Helper\getSlide;
 						return $slidehelper;
 						}
 					)

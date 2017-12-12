@@ -25,40 +25,32 @@ class ProductsTable extends AbstractTableGateway {
 				'description',
 				'new',
 		));
-// 		'ListProducts' => array(
-// 				'Products1' => array(
-// 						'id' 	=> '01',
-// 						'name' 	=> 'Sản Phẩm 01',
-// 						'img'	=> array(
-// 								'id'	=> '001',
-// 								'name_img' => 'abc.jpg',
-								
-// 						)
-// 				) 
-// 		)
 		$select->join('type_products','type_products.id = products.id_type',array(
 				'name_type',
 				'id_sex',
 				'description_type',
 		),$select::JOIN_INNER);
-		$select->join('img_product', 'img_product.id_product = products.id',array(
-				'id',
-				'img_name',
-		),$select::JOIN_INNER);
-		$result = $this->selectWith($select);
-		return $result->count() ? $result : null;
+        $result = $this->selectWith($select);
+
+        $arr = [];
+        foreach ($result as  $sp){
+            $listImg = $this->getListImgByIdProduct($sp['id']);
+            $sp['imgs'] = $listImg;
+            $arr[] = $sp;
+        }
+		return $arr;
 	}
 	public  function getCountProducts(){
         $select = new Select('products');
         $select->columns([new Expression("count(*) as total")]);
     }
-	public function getListImgProduct(){
+	public function getListImgByIdProduct($id){
 		$select = new Select('img_product');
 		$select->columns(array(
 			'id',
 			'img_name',
 			'id_product',
-		));
+		))->where(array('id_product' => $id));
 		$result = $this->selectWith($select);
 		return $result->count() ? $result : null;
 	}
@@ -66,7 +58,7 @@ class ProductsTable extends AbstractTableGateway {
 		if (empty($id)){
 			throw new \InvalidArgumentException("Invalid $id");
 		}
-		$select = new Select('products');
+		$select = new Select($this->table);
 		$select->columns(array(
 				'id',
 				'name',
@@ -97,7 +89,6 @@ class ProductsTable extends AbstractTableGateway {
 				'description_type',
 		),$select::JOIN_INNER);
 		$select->join('img_product', 'img_product.id_product = products.id',array(
-				'id',
 				'img_name',
 		),$select::JOIN_INNER);
 		$select->where(array('products.new' => 0));
@@ -120,18 +111,41 @@ class ProductsTable extends AbstractTableGateway {
 				'description_type',
 		),$select::JOIN_INNER);
 		$select->join('img_product', 'img_product.id_product = products.id',array(
-				'id',
 				'img_name',
 		),$select::JOIN_INNER);
 		$select->where(array('products.promotion_price < products.unit_price'));
 		$result = $this->selectWith($select);
+//		var_dump($result);
+//		die();
 		return $result->count() ? $result : null;
 	}
+
+    function checkProductNameExist($name, $id) {
+        $result = $this->select(function (Select $select) use ($name, $id) {
+            $select->columns(array (
+                'name'
+            ));
+            if ($id) {
+                $select->where(array (
+                    'name' => $name,
+                    'valid_flg IS NOT NULL'
+                ));
+                $select->where->notEqualTo('id', $id);
+            } else {
+                $select->where(array (
+                    'group_name' => $name,
+                    'valid_flg IS NOT NULL'
+                ));
+            }
+        });
+        return $result->count() ? TRUE : FALSE;
+    }
 	public function getNameProductById($id){
         $select = new Select('products');
         $select->columns(array(
             'name',
         ));
+        $select->where(array('id'=>$id));
     }
 }
 ?>

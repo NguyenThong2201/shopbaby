@@ -9,7 +9,7 @@
 return array (
 		'view_helpers' => array (
 				'invokables' => array (
-						'slide' => 'Application\View\Helper\SlideHelper',
+						'slide' => 'Application\View\Helper\getSlide',
 				)
 		) ,
 		'router' => array (
@@ -186,7 +186,12 @@ return array (
 				),
 				'template_path_stack' => array (
 						__DIR__ . '/../view' 
-				) 
+				),
+                'view_helpers' => array (
+                    'invokables' => array (
+                        'getSlide' => 'Application\View\Helper\getSlide',
+                    )
+                ),
 		),
 		// Placeholder for console routes
 		'console' => array (

@@ -644,6 +644,7 @@ h2.tittle {
 }
 .grid-arr .grid-arrival figure > a .grid-img img {
   width: 100%;
+	max-height: 360px;
 }
 .grid-arr .grid-arrival figure > a .grid-img + .grid-img {
   position: absolute;

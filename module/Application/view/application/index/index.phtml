@@ -297,18 +297,20 @@
 					<div class="grid-arrival">
 						<figure>
 							<a href="single.html">
-								<div class ="grid-img">
-									<img src="img/<?php echo $pr->img_name;?>" class="img-responsive" alt="">
-								</div>
+                                <?php foreach ($pr['imgs'] as $img):?>
+                                    <div class ="grid-img">
+                                        <img src="img/<?php echo $img->img_name;?>" class="img-responsive" alt="">
+                                    </div>
+                                <?php endforeach;?>
 							</a>
 						</figure>
 					</div>
-					<?php if ($pr->new == 0):?>
+					<?php if ($pr['new'] == 0):?>
 					<div class="ribben">
 						<p>NEW</p>
 					</div>
 					<?php endif;?>
-					<?php if ($pr->unit_price > $pr->promotion_price):?>
+					<?php if ($pr['unit_price'] > $pr['promotion_price']):?>
 					<div class="ribben1">
 						<p>SALE</p>
 					</div>
@@ -318,15 +320,15 @@
 					</div>
 					<div class="women">
 						<h6>
-							<a href="single.html"><?php echo $pr->name;?></a>
+							<a href="single.html"><?php echo $pr['name'];?></a>
 						</h6>
 						<span class="size">XL / XXL / S </span>
 						
 						<p>
-							<?php if ($pr->unit_price > $pr->promotion_price):?>
-							<del><?php echo number_format($pr->unit_price);?></del>
+							<?php if ($pr['unit_price'] > $pr['promotion_price']):?>
+							<del><?php echo number_format($pr['unit_price']);?></del>
 							<?php endif;?>
-							<em class="item_price"><?php echo number_format($pr->promotion_price);?></em>
+							<em class="item_price"><?php echo number_format($pr['promotion_price']);?></em>
 							
 						</p>
 						

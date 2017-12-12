@@ -102,6 +102,20 @@ class ProductsController extends AbstractActionController
         ));
     }
 
+    public function ajaxCheckNameProductsAction()
+    {
+        $id = $this->params()->fromPost('id');
+        $name = $this->params()->fromPost('name');
+        //$productsTable = $this->getServiceLocator()->get('Application\Model\ProductsTable');
+        $productsTable = new ProductsTable($this->getAdapter());
+        $flag = $productsTable->checkProductNameExist($name, $id);
+        return new JsonModel(array (
+            'flag' => ($flag) ? 1 : 0,
+            'id' => $id,
+            'name' => $name
+        ));
+    }
+
     private function getAdapter()
     {
         return $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
